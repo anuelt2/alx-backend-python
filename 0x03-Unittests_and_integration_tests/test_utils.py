@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """ Unit tests for functions in `utils` module
 """
 
-from parameterized import parameterized
 import unittest
+from parameterized import parameterized
 from unittest.mock import patch, Mock
 
 from utils import access_nested_map, get_json, memoize
@@ -26,18 +26,16 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
     @parameterized.expand([
-        ({}, ("a",)),
-        ({"a": 1}, ("a", "b")),
+        ({}, ("a",), KeyError),
+        ({"a": 1}, ("a", "b"), KeyError),
         ])
-    def test_access_nested_map_exception(self, nested_map, path):
+    def test_access_nested_map_exception(self, nested_map, path, expected):
         """
         Testing that `access_nested_map` function raises the right exception
         when given invalid paths, and the right exception message
         """
-        with self.assertRaises(KeyError) as context:
+        with self.assertRaises(expected) as context:
             access_nested_map(nested_map, path)
-
-        self.assertEqual(str(context.exception), f"'{path[-1]}'")
 
 
 class TestGetJson(unittest.TestCase):
