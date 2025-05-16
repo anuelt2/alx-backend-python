@@ -34,8 +34,10 @@ class TestAccessNestedMap(unittest.TestCase):
         Testing that `access_nested_map` function raises the right exception
         when given invalid paths, and the right exception message
         """
-        with self.assertRaises(KeyError):
+        with self.assertRaises(KeyError) as context:
             access_nested_map(nested_map, path)
+
+        self.assertEqual(str(context.exception), f"'{path[-1]}'")
 
 
 class TestGetJson(unittest.TestCase):
