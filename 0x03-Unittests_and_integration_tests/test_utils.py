@@ -6,7 +6,6 @@ import unittest
 from parameterized import parameterized
 from unittest.mock import patch, Mock
 from utils import access_nested_map, get_json, memoize
-from typing import Mapping, Sequence, Any
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -17,25 +16,20 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2),
         ])
-    def test_access_nested_map(
-            self,
-            nested_map: Mapping,
-            path: Sequence,
-            expected: Any
-            ) -> None:
+    def test_access_nested_map(self, nested_map, path, expected):
         """Testing that `access_nested_map` function returns expected value"""
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
     @parameterized.expand([
-        ({}, ("a",), KeyError),
-        ({"a": 1}, ("a", "b"), KeyError),
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b")),
         ])
-    def test_access_nested_map_exception(self, nested_map, path, expected):
+    def test_access_nested_map_exception(self, nested_map, path):
         """
         Testing that `access_nested_map` function raises the right exception
         when given invalid paths, and the right exception message
         """
-        with self.assertRaises(expected) as context:
+        with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
 
 
